@@ -2,7 +2,7 @@
 
 Version1.3:
 1) Limit number of pics to be displayed on screen during game play
-2) Create fad out effect for pic removal
+2) Create fade out effect for pic removal
 3) Create start game logic for 1 player
 
 Version1.0:
