@@ -54,6 +54,7 @@ function rotatePic(evt) {
         case 37:
             if (state.pictures[state.beginIdx].rotationUnit < 20) {
                 state.pictures[state.beginIdx].rotationUnit += 10;
+                renderPic();
             }
         break;
         
@@ -61,6 +62,7 @@ function rotatePic(evt) {
         case 39:
             if (state.pictures[state.beginIdx].rotationUnit > -20) {
                 state.pictures[state.beginIdx].rotationUnit -= 10;
+                renderPic();
             }
         break;
         
@@ -71,16 +73,19 @@ function rotatePic(evt) {
                     finishGame();
                 } else {
                     state.beginIdx += 1;
-                    state.endIdx += 1;
+                    // increment endIdx only when there are more pics to add
+                    if (state.endIdx < pictureObj.art.length - 1) {
+                        state.endIdx += 1;
+                    }
                     addSinglePic(pictureObj.art[state.endIdx]);
+
+                    renderPicUpdate();
                 }
             }
         break;
     }
 
     // console.log(state.pictures[0].rotationUnit);
-
-    renderPic();
 }
 
 function finishGame() {
@@ -90,10 +95,37 @@ function finishGame() {
 // update picture angles on screen;
 function renderPic() {
     for (let i = state.beginIdx; i <= state.endIdx; i++) {
+        const currentLiEl = elements.picsEl[i];
+        const currentImgEl = currentLiEl.firstChild;
+
+        const currentRotationUnit = state.pictures[i].rotationUnit;
+        currentImgEl.style.transform = `rotate(${currentRotationUnit}deg)`;
+        elements.picContainerEl.appendChild(currentLiEl);
+    }
+}
+
+function renderPicUpdate() {
+
+    for (let i = state.beginIdx - 1; i <= state.endIdx; i++) {
+        const currentLiEl = elements.picsEl[i];
+        const currentImgEl = currentLiEl.firstChild;
+
         const currentRotationUnit = state.pictures[i].rotationUnit;
         elements.picsEl[i].firstChild.style.transform = `rotate(${currentRotationUnit}deg)`;
         elements.picContainerEl.appendChild(elements.picsEl[i]);
     }
+
+    const firstLiEl = elements.picsEl[state.beginIdx - 1];
+    const firstImgEl = firstLiEl.firstChild;
+
+    // firstImgEl.classList.add('hide');
+    setTimeout(function() {firstImgEl.classList.add('hide')}, 0);
+
+    setTimeout(function() {
+        firstLiEl.classList.add('hide');
+        firstLiEl.remove();
+    }, 300);
 }
 
 initiatePic();
+

@@ -36,10 +36,10 @@ section {
     opacity: 0;
 }
 
-
 .pic-queue {
     margin: 50px;
     position: relative;
+    transition: 0.3s;
 }
 
 .portrait {
