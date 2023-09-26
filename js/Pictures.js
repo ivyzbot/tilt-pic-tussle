@@ -10,9 +10,10 @@ class Pictures {
         this.rotationUnit = ROTATION_UNITS[Math.floor((Math.random() * ROTATION_UNITS.length))];
     }
 
-    //To ture the picture into an HTML element
+    //To ture the picture into an HTML element (img tag rapped inside a list tag)
     addElement() {
         const alt = this.imgName.split('-')[1];
+        let liEl = document.createElement('li');
         let imgEl = document.createElement('img');
         imgEl.src = this.url;
         imgEl.alt = alt;
@@ -22,7 +23,9 @@ class Pictures {
             imgEl.classList.add('pic-queue', 'landscape');
         }
         
-        return imgEl;
+        liEl.appendChild(imgEl);
+
+        return liEl;
     }
 }
 

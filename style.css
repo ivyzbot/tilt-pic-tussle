@@ -9,7 +9,7 @@ body {
 
 main {
     display: flex;
-    flex-direction: row; 
+    flex-direction: column; 
     height: 100vh;
     width: 100vw;
     justify-content: center;
@@ -17,26 +17,25 @@ main {
     font-size: 50px;
 }
 
-aside {
-    background-color: bisque;
-    width: 20%;
-}
 
 section {
     background-color: lightblue;
-    width: 80%;
+    height: 85%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    /* overflow: hidden; */
 }
 
-/* .pic-container {
-    display: flex;
-    flex-wrap: nowrap;
-} */
+.hide {
+    opacity: 0;
+}
 
 .pic-queue {
     margin: 50px;
+    position: relative;
+    transition: 0.3s;
 }
 
 .portrait {
@@ -47,4 +46,35 @@ section {
     width: 300px;
 }
 
+/* #pic-container {
+    position: relative;
+    display: inline-block;
+    overflow: visible;
+} */
 
+#pic-container > li {
+    display: inline-block;
+}
+
+#controls {
+    background-color: bisque;
+    height: 15%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+#start {
+    width: 100px;
+    height: 50px;
+    font-size: 30px;
+}
+
+#players {
+    width: 100px;
+    height: 50px;
+    font-size: 30px;  
+}

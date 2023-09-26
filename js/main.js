@@ -1,79 +1,101 @@
-import Pictures from './Pictures.js';
+// import Pictures from './Pictures.js';
 import pictureObj from './pictureBank.js'; //picture objects
 
  /*----- constants -----*/
-
-
+const MAX_ONSCREEN_PICS = 5;
 
  /*----- state variables -----*/
 const state = {
-    pictures: [],
-    currentPic: 0,
-    finished: false
+    pictures: [], //list of picture class instances to be straighten
+    finished: false,
+    beginIdx: 0,
+    endIdx: MAX_ONSCREEN_PICS - 1,
+    playerNum: 1
 };
 
  /*----- cached elements  -----*/
 // const sectionEl = document.querySelector('section');
 const elements = {
     picContainerEl: document.getElementById('pic-container'),    
-    picsEl: document.querySelectorAll('.pic-queue')
+    picsEl: [], // corresponding elements of state.pictures
+    playerEl: document.getElementById('players'),
+    startEl: document.getElementById('start')
 }
 
 
  /*----- event listeners -----*/
 document.addEventListener('keydown', rotatePic);
 
+elements.playerEl.addEventListener('change', (evt) => {
+    state.playerNum = evt.target.value;
+});
+
+elements.startEl.addEventListener('click', () => {
+    initiatePic();
+})
 
  /*----- functions -----*/
  function initiatePic() {
-    pictureObj.art.forEach((picture) => {
-        addSinglePic(picture);
-    })
+    for (let i = 0; i < MAX_ONSCREEN_PICS; i++) {
+        addSinglePic(pictureObj.art[i]);
+    }
+
+    renderPic();
  }
 
 
-//To add pictures into the queue
+// add single pic into the queue
 function addSinglePic(pictureInstance) {
 
     state.pictures.push(pictureInstance);
-    const picEl = pictureInstance.addElement();
+    elements.picsEl.push(pictureInstance.addElement());
+
+    // const picEl = pictureInstance.addElement();
     //To roate the picture element
 
-    picEl.style.transform = `rotate(${pictureInstance.rotationUnit}deg)`;
-    elements.picContainerEl.appendChild(picEl);
+    // picEl.style.transform = `rotate(${pictureInstance.rotationUnit}deg)`;
+    // elements.picContainerEl.appendChild(picEl);
 }
 
+// Rotation degree validation
 function rotatePic(evt) {
     switch (evt.keyCode) {
         // left arrow
         case 37:
-            if (state.pictures[state.currentPic].rotationUnit < 20) {
-                state.pictures[state.currentPic].rotationUnit += 10;
+            if (state.pictures[state.beginIdx].rotationUnit < 20) {
+                state.pictures[state.beginIdx].rotationUnit += 10;
+                renderPic();
             }
         break;
         
         // right arrow
         case 39:
-            if (state.pictures[state.currentPic].rotationUnit > -20) {
-                state.pictures[state.currentPic].rotationUnit -= 10;
+            if (state.pictures[state.beginIdx].rotationUnit > -20) {
+                state.pictures[state.beginIdx].rotationUnit -= 10;
+                renderPic();
             }
         break;
         
         // down arrow
         case 40:
-            if (state.pictures[state.currentPic].rotationUnit === 0) {
-                console.log(state.currentPic);
-                console.log(pictureObj.art.length);
-                if (state.currentPic === pictureObj.art.length - 1) {
+            if (state.pictures[state.beginIdx].rotationUnit === 0) {
+                if (state.beginIdx === pictureObj.art.length - 1) {
                     finishGame();
-                } else {state.currentPic += 1;}
+                } else {
+                    state.beginIdx += 1;
+                    // increment endIdx only when there are more pics to add
+                    if (state.endIdx < pictureObj.art.length - 1) {
+                        state.endIdx += 1;
+                    }
+                    addSinglePic(pictureObj.art[state.endIdx]);
+
+                    renderPicUpdate();
+                }
             }
         break;
     }
 
     // console.log(state.pictures[0].rotationUnit);
-
-    renderPic();
 }
 
 function finishGame() {
@@ -82,25 +104,36 @@ function finishGame() {
 
 // update picture angles on screen;
 function renderPic() {
-    const picsEl = document.querySelectorAll('.pic-queue');
-    picsEl.forEach( (picEl, idx) => {
-        const newRotationUnit = state.pictures[idx].rotationUnit
-        picEl.style.transform = `rotate(${newRotationUnit}deg)`;
-    })
+    for (let i = state.beginIdx; i <= state.endIdx; i++) {
+        const currentLiEl = elements.picsEl[i];
+        const currentImgEl = currentLiEl.firstChild;
+
+        const currentRotationUnit = state.pictures[i].rotationUnit;
+        currentImgEl.style.transform = `rotate(${currentRotationUnit}deg)`;
+        elements.picContainerEl.appendChild(currentLiEl);
+    }
 }
 
-initiatePic();
+function renderPicUpdate() {
 
+    for (let i = state.beginIdx - 1; i <= state.endIdx; i++) {
+        const currentLiEl = elements.picsEl[i];
+        const currentImgEl = currentLiEl.firstChild;
 
+        const currentRotationUnit = state.pictures[i].rotationUnit;
+        elements.picsEl[i].firstChild.style.transform = `rotate(${currentRotationUnit}deg)`;
+        elements.picContainerEl.appendChild(elements.picsEl[i]);
+    }
 
+    const firstLiEl = elements.picsEl[state.beginIdx - 1];
+    const firstImgEl = firstLiEl.firstChild;
 
+    // firstImgEl.classList.add('hide');
+    setTimeout(function() {firstImgEl.classList.add('hide')}, 0);
 
-
-
-
-
-
-
-
-
+    setTimeout(function() {
+        firstLiEl.classList.add('hide');
+        firstLiEl.remove();
+    }, 300);
+}
 
