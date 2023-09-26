@@ -2,27 +2,37 @@
 import pictureObj from './pictureBank.js'; //picture objects
 
  /*----- constants -----*/
-const MAX_ONSCREEN_PICS = 3;
+const MAX_ONSCREEN_PICS = 5;
 
  /*----- state variables -----*/
 const state = {
     pictures: [], //list of picture class instances to be straighten
     finished: false,
     beginIdx: 0,
-    endIdx: MAX_ONSCREEN_PICS - 1
+    endIdx: MAX_ONSCREEN_PICS - 1,
+    playerNum: 1
 };
 
  /*----- cached elements  -----*/
 // const sectionEl = document.querySelector('section');
 const elements = {
     picContainerEl: document.getElementById('pic-container'),    
-    picsEl: [] // corresponding elements of state.pictures
+    picsEl: [], // corresponding elements of state.pictures
+    playerEl: document.getElementById('players'),
+    startEl: document.getElementById('start')
 }
 
 
  /*----- event listeners -----*/
 document.addEventListener('keydown', rotatePic);
 
+elements.playerEl.addEventListener('change', (evt) => {
+    state.playerNum = evt.target.value;
+});
+
+elements.startEl.addEventListener('click', () => {
+    initiatePic();
+})
 
  /*----- functions -----*/
  function initiatePic() {
@@ -126,6 +136,4 @@ function renderPicUpdate() {
         firstLiEl.remove();
     }, 300);
 }
-
-initiatePic();
 
