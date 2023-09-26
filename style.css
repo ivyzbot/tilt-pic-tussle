@@ -28,15 +28,18 @@ section {
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    /* overflow: hidden; */
 }
 
-/* .pic-container {
-    display: flex;
-    flex-wrap: nowrap;
-} */
+.hide {
+    opacity: 0;
+}
+
 
 .pic-queue {
     margin: 50px;
+    position: relative;
 }
 
 .portrait {
@@ -47,4 +50,13 @@ section {
     width: 300px;
 }
 
+/* #pic-container {
+    position: relative;
+    display: inline-block;
+    overflow: visible;
+} */
+
+#pic-container > li {
+    display: inline-block;
+}
 
