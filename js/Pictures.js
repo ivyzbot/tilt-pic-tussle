@@ -1,4 +1,5 @@
 const ROTATION_UNITS = [-20, -20, -10, -10, 0, 10, 10, 20, 20];
+const COLOR = ['black', 'gold', 'white', 'white', 'white', 'white', 'white', 'white', 'white', 'white'];
 
 class Pictures {
     constructor(url) {
@@ -8,6 +9,7 @@ class Pictures {
 
         //To give each Picture instance a random rotation degree
         this.rotationUnit = ROTATION_UNITS[Math.floor((Math.random() * ROTATION_UNITS.length))];
+        this.color = COLOR[Math.floor((Math.random() * COLOR.length))];
     }
 
     //To ture the picture into an HTML element (img tag rapped inside a list tag)
@@ -17,6 +19,7 @@ class Pictures {
         let imgEl = document.createElement('img');
         imgEl.src = this.url;
         imgEl.alt = alt;
+        imgEl.style.border = `10px solid ${this.color}`;
         if (this.type === '1') {
             imgEl.classList.add('pic-queue', 'portrait');
         } else {
