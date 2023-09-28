@@ -1,5 +1,9 @@
 # tilt-pic-tussle
 
+Version1.4:
+1) Add logic to handle different 3 types of pics, each with different rotation logic
+2) Add restart game function 
+
 Version1.3:
 1) Limit number of pics to be displayed on screen during game play
 2) Create fade out effect for pic removal
