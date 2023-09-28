@@ -1,4 +1,3 @@
-// import Pictures from './Pictures.js';
 import pictureObj from './pictureBank.js'; //picture objects
 
  /*----- constants -----*/
@@ -10,7 +9,8 @@ const state = {
     finished: false,
     beginIdx: 0,
     endIdx: MAX_ONSCREEN_PICS - 1,
-    playerNum: 1
+    playerNum: 1,
+    locked: false
 };
 
  /*----- cached elements  -----*/
@@ -31,7 +31,7 @@ elements.playerEl.addEventListener('change', (evt) => {
 });
 
 elements.startEl.addEventListener('click', () => {
-    initiatePic();
+    startGame();
 })
 
  /*----- functions -----*/
@@ -46,19 +46,23 @@ elements.startEl.addEventListener('click', () => {
 
 // add single pic into the queue
 function addSinglePic(pictureInstance) {
-
     state.pictures.push(pictureInstance);
     elements.picsEl.push(pictureInstance.addElement());
-
-    // const picEl = pictureInstance.addElement();
-    //To roate the picture element
-
-    // picEl.style.transform = `rotate(${pictureInstance.rotationUnit}deg)`;
-    // elements.picContainerEl.appendChild(picEl);
 }
 
-// Rotation degree validation
+// Rotation logic depends on the color of the picture
 function rotatePic(evt) {
+    if (state.pictures[state.beginIdx].color === 'white') {
+        rotateWhite(evt);
+    } else if (state.pictures[state.beginIdx].color === 'gold') {
+        rotateGold(evt);
+    } else if (state.pictures[state.beginIdx].color === 'black') {
+        rotateBlack(evt);
+    }
+}
+
+// normal rotation
+function rotateWhite(evt) {
     switch (evt.keyCode) {
         // left arrow
         case 37:
@@ -80,7 +84,7 @@ function rotatePic(evt) {
         case 40:
             if (state.pictures[state.beginIdx].rotationUnit === 0) {
                 if (state.beginIdx === pictureObj.art.length - 1) {
-                    finishGame();
+                    finishGame(state.beginIdx);
                 } else {
                     state.beginIdx += 1;
                     // increment endIdx only when there are more pics to add
@@ -94,22 +98,109 @@ function rotatePic(evt) {
             }
         break;
     }
-
-    // console.log(state.pictures[0].rotationUnit);
 }
 
-function finishGame() {
-        window.alert('Finished!');
+// normal rotation + a shortcut to bypass even if pic is still tilted
+function rotateGold(evt) {
+    switch (evt.keyCode) {
+        // left arrow
+        case 37:
+            if (state.pictures[state.beginIdx].rotationUnit < 20) {
+                state.pictures[state.beginIdx].rotationUnit += 10;
+                renderPic();
+            }
+        break;
+        
+        // right arrow
+        case 39:
+            if (state.pictures[state.beginIdx].rotationUnit > -20) {
+                state.pictures[state.beginIdx].rotationUnit -= 10;
+                renderPic();
+            }
+        break;
+        
+        // down arrow
+        case 40:
+            if (state.beginIdx === pictureObj.art.length - 1) {
+                finishGame(state.beginIdx);
+            } else {
+                state.beginIdx += 1;
+                // increment endIdx only when there are more pics to add
+                if (state.endIdx < pictureObj.art.length - 1) {
+                    state.endIdx += 1;
+                }
+                addSinglePic(pictureObj.art[state.endIdx]);
+                renderPicUpdate();
+                }
+        break;
+    }
+}
+
+// normal rotation
+function rotateBlack(evt) {
+    switch (state.locked) {
+        case false:
+            if (evt.keyCode === 38) {
+                if (state.beginIdx === pictureObj.art.length - 1) {
+                    finishGame(state.beginIdx);
+                } else {
+                    state.beginIdx += 1;
+                    // increment endIdx only when there are more pics to add
+                    if (state.endIdx < pictureObj.art.length - 1) {
+                        state.endIdx += 1;
+                    }
+                    addSinglePic(pictureObj.art[state.endIdx]);
+                    renderPicUpdate();
+                    }
+            } else {
+                state.locked = true;
+
+                setTimeout( function(){
+                    state.locked = false;
+                    renderPic();
+                },3000);
+                renderPic();
+            }
+        break;
+
+        // case true:
+        // break;
+
+    }
+}
+
+function finishGame(beginIdx) {
+    // remove last picture from screen:
+    const currentLiEl = elements.picsEl[beginIdx];
+    const currentImgEl = currentLiEl.firstChild;
+
+    setTimeout(function() {currentImgEl.classList.add('hide')}, 0);
+
+    setTimeout(function() {
+        currentLiEl.classList.add('hide');
+        currentLiEl.remove();
+    }, 300);
+    
+    window.alert('Finished!');
 }
 
 // update picture angles on screen;
 function renderPic() {
+
     for (let i = state.beginIdx; i <= state.endIdx; i++) {
         const currentLiEl = elements.picsEl[i];
         const currentImgEl = currentLiEl.firstChild;
+        const currentPic = state.pictures[i];
 
         const currentRotationUnit = state.pictures[i].rotationUnit;
         currentImgEl.style.transform = `rotate(${currentRotationUnit}deg)`;
+        currentImgEl.style.borderColor = state.pictures[i].color;
+
+        if ( (state.locked === true) && currentPic.color === 'black' ) {
+            console.log('here');
+            currentImgEl.style.borderColor = 'red';
+        }
+
         elements.picContainerEl.appendChild(currentLiEl);
     }
 }
@@ -119,9 +210,16 @@ function renderPicUpdate() {
     for (let i = state.beginIdx - 1; i <= state.endIdx; i++) {
         const currentLiEl = elements.picsEl[i];
         const currentImgEl = currentLiEl.firstChild;
+        const currentPic = state.pictures[i];
 
         const currentRotationUnit = state.pictures[i].rotationUnit;
         elements.picsEl[i].firstChild.style.transform = `rotate(${currentRotationUnit}deg)`;
+        currentImgEl.style.borderColor = state.pictures[i].color;
+
+        if ( (state.locked === true) && currentPic.color === 'black' ) {
+            currentImgEl.style.borderColor === 'red';
+        }
+    
         elements.picContainerEl.appendChild(elements.picsEl[i]);
     }
 
@@ -135,5 +233,19 @@ function renderPicUpdate() {
         firstLiEl.classList.add('hide');
         firstLiEl.remove();
     }, 300);
+}
+
+function startGame() {
+    state.pictures = []; //list of picture class instances to be straighten
+    state.finished = false;
+    state.beginIdx = 0;
+    state.endIdx = MAX_ONSCREEN_PICS - 1;
+    state.playerNum = 1;
+    state.locked = false;
+
+    elements.picsEl = [];
+    elements.picContainerEl.innerHTML = '';
+
+    initiatePic();
 }
 
