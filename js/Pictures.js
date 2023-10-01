@@ -1,5 +1,5 @@
-const ROTATION_UNITS = [-20, -20, -10, -10, 0, 10, 10, 20, 20];
-const COLOR = ['black', 'gold', 'white', 'white', 'white', 'white', 'white', 'white', 'white', 'white'];
+const ROTATION_UNITS = [-30, -30, -15, -15, 0, 15, 15, 30, 30];
+const COLOR = ['black', 'gold', 'gold', 'gold', 'white', 'white', 'white'];
 
 class Pictures {
     constructor(url) {
@@ -29,6 +29,26 @@ class Pictures {
         liEl.appendChild(imgEl);
 
         return liEl;
+    }
+
+    getRotationUnit() {
+        return this.rotationUnit;
+    }
+
+    getColor() {
+        return this.color;
+    }
+
+    setRotationUnit(degree) {
+        this.rotationUnit += degree;
+    }
+
+    resetRotationUnit() {
+        this.rotationUnit = ROTATION_UNITS[Math.floor((Math.random() * ROTATION_UNITS.length))];
+    }
+
+    resetColor() {
+        this.color = COLOR[Math.floor((Math.random() * COLOR.length))];
     }
 }
 
