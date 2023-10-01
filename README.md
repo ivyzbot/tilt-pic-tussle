@@ -1,5 +1,10 @@
 # tilt-pic-tussle
 
+Version1.5:
+1) Update the logic to rotate golden pics
+2) Update the picture class to have getter, setter and reset functions
+3) Add a function to randomize picture order, color and rotation angle after game restart
+
 Version1.4:
 1) Add logic to handle different 3 types of pics, each with different rotation logic
 2) Add restart game function 
