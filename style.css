@@ -7,6 +7,7 @@ body {
     margin: 0;
 }
 
+
 main {
     display: flex;
     flex-direction: column; 
@@ -18,11 +19,15 @@ main {
 
 
 section {
-    background-color: lightblue;
+    background-color: #B5CB99;
     height: 85%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+dialog {
+    vertical-align: top;
 }
 
 .hide {
@@ -48,24 +53,94 @@ section {
 }
 
 #controls {
-    background-color: bisque;
+    background-color: #FCE09B;
     height: 15%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
     padding-left: 100px;
     padding-right: 100px;
 }
 
-#start {
-    width: 100px;
-    height: 50px;
-    font-size: 30px;
+#control-1 {
+    flex-basis: 20%;
+    flex-grow: 2;
+    text-align: center;
 }
 
-#players {
-    width: 100px;
-    height: 50px;
-    font-size: 30px;  
+#control-2 {
+    flex-basis: 60%;
+    flex-grow: 6;
+    text-align: center;
+}
+
+#manual {
+    width: 220px;
+    height: 65px;
+    font-size: 30px;
+    margin: auto;
+    background-color: #004225;
+    color: #F5F5DC;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 10px;
+    transition-duration: 0.4s;
+}
+
+#manual:hover {
+    background-color: #B5CB99;
+    color: #004225;
+    border-color: #004225;
+    border-style: solid;
+    border-width: 5px;
+}
+
+#manual-content {
+    height: 750px;
+    vertical-align: top;
+}
+
+#close {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    font-weight: bolder;
+    vertical-align: top;
+}
+
+#start {
+    width: 120px;
+    height: 65px;
+    font-size: 30px;
+    background-color: #004225;
+    color: #F5F5DC;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 10px;
+    transition-duration: 0.4s;
+}
+
+#start:hover {
+    background-color: #B5CB99;
+    color: #004225;
+    border-color: #004225;
+    border-style: solid;
+    border-width: 5px;
+}
+
+#timer {
+    font-size: 40px;
+    text-align: left;
+    flex-basis: 20%;
+    flex-grow: 2;
+    color: #186F65;
+}
+
+#game-result {
+    margin: auto;
+    color: #E55604;
 }

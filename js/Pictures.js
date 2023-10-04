@@ -1,5 +1,5 @@
 const ROTATION_UNITS = [-30, -30, -15, -15, 0, 15, 15, 30, 30];
-const COLOR = ['black', 'gold', 'gold', 'gold', 'white', 'white', 'white'];
+const COLOR = ['black', 'gold', 'gold', 'white', 'white', 'white'];
 
 class Pictures {
     constructor(url) {
