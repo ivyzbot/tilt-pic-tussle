@@ -1,5 +1,11 @@
 # tilt-pic-tussle
 
+Version1.6: finalised for 1p mode
+1) Add a timer to track user's time spent on each game
+2) Replace alert with proper win/loss messages on screen
+3) Add user guide to onboard new players
+4) Add more pics and stylings
+
 Version1.5:
 1) Update the logic to rotate golden pics
 2) Update the picture class to have getter, setter and reset functions
