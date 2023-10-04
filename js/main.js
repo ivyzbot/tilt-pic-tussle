@@ -1,7 +1,25 @@
 import pictureBank from './pictureBank.js'; //picture objects
+import Timers from './Timers.js';
+
+
+ /*----- cached elements  -----*/
+
+const elements = {
+    picContainerEl: document.getElementById('pic-container'),    
+    picsEl: [], // corresponding elements of state.pictures
+    playerEl: document.getElementById('players'),
+    startEl: document.getElementById('start'),
+    timerEl: document.getElementById('timer'),
+    manualEl: document.getElementById('manual'),
+    manualContentEl: document.querySelector('dialog'),
+    closeEl: document.getElementById('close'),
+    sectionEl: document.querySelector('section'),
+}
 
  /*----- constants -----*/
 const MAX_ONSCREEN_PICS = 5;
+const timer = new Timers(elements.timerEl, 60, renderTimeup);
+const jsConfetti = new JSConfetti();
 
  /*----- state variables -----*/
 const state = {
@@ -11,28 +29,22 @@ const state = {
     endIdx: MAX_ONSCREEN_PICS - 1,
     playerNum: 1,
     locked: false,
+    gameStart: false,
+    gameWon: false
 };
 let pictureObj = {};
 
- /*----- cached elements  -----*/
-// const sectionEl = document.querySelector('section');
-const elements = {
-    picContainerEl: document.getElementById('pic-container'),    
-    picsEl: [], // corresponding elements of state.pictures
-    playerEl: document.getElementById('players'),
-    startEl: document.getElementById('start')
-}
-
-
  /*----- event listeners -----*/
 document.addEventListener('keydown', rotatePic);
-
-elements.playerEl.addEventListener('change', (evt) => {
-    state.playerNum = evt.target.value;
-});
-
 elements.startEl.addEventListener('click', () => {
     startGame();
+}
+)
+elements.manualEl.addEventListener('click', () => {
+    elements.manualContentEl.open = true;
+})
+elements.closeEl.addEventListener('click', () => {
+    elements.manualContentEl.open = false;
 })
 
  /*----- functions -----*/
@@ -52,12 +64,14 @@ function addSinglePic(pictureInstance) {
 
 // Rotation logic depends on the color of the picture
 function rotatePic(evt) {
-    if (state.pictures[state.beginIdx].getColor() === 'white') {
-        rotateWhite(evt);
-    } else if (state.pictures[state.beginIdx].getColor() === 'gold') {
-        rotateGold(evt);
-    } else if (state.pictures[state.beginIdx].getColor() === 'black') {
-        rotateBlack(evt);
+    if (state.gameStart) {
+        if (state.pictures[state.beginIdx].getColor() === 'white') {
+            rotateWhite(evt);
+        } else if (state.pictures[state.beginIdx].getColor() === 'gold') {
+            rotateGold(evt);
+        } else if (state.pictures[state.beginIdx].getColor() === 'black') {
+            rotateBlack(evt);
+        }
     }
 }
 
@@ -161,7 +175,7 @@ function rotateBlack(evt) {
                 setTimeout( function(){
                     state.locked = false;
                     renderPic();
-                },3000);
+                }, 3000);
                 renderPic();
             }
         break;
@@ -169,6 +183,8 @@ function rotateBlack(evt) {
 }
 
 function finishGame(beginIdx) {
+    state.gameWon = true;
+    state.gameStart = false;
     // remove last picture from screen:
     const currentLiEl = elements.picsEl[beginIdx];
     const currentImgEl = currentLiEl.firstChild;
@@ -178,9 +194,17 @@ function finishGame(beginIdx) {
     setTimeout(function() {
         currentLiEl.classList.add('hide');
         currentLiEl.remove();
-    }, 300);
+    }, 100);
     
-    window.alert('Finished!');
+    timer.stop();
+
+    renderGameOver();
+}
+
+function renderTimeup() {
+    state.gameStart = false;
+    elements.picContainerEl.innerHTML = '';
+    renderGameOver()
 }
 
 // update picture angles on screen;
@@ -234,6 +258,35 @@ function renderPicUpdate() {
     }, 300);
 }
 
+function renderGameOver() {
+    const gameResultEl = document.createElement('div');
+    gameResultEl.setAttribute('id', 'game-result');
+   
+    if (state.gameWon) {
+        gameResultEl.innerHTML = `Finished in ${timer.getUsedTime()} seconds!!!`;
+        setTimeout( () => {
+            elements.sectionEl.appendChild(gameResultEl)
+            jsConfetti.addConfetti({
+                emojis: ['🌈', '🎨', '🖼',' 🎈'],
+                confettiNumber: 100,
+                emojiSize: 60,
+             })
+        }, 100);
+    } else {
+        gameResultEl.innerHTML = 'Better luck next time!';
+        elements.sectionEl.appendChild(gameResultEl)
+            jsConfetti.addConfetti({
+                emojis: ['🤡', '💣'],
+                confettiNumber: 50,
+                emojiSize: 60,
+             })    
+        }
+
+    setTimeout(() => {
+        jsConfetti.clearCanvas();
+    }, 5000);
+}
+
 function preparePic() {
     pictureObj.art = [];
     for (let i = 0; i < pictureBank.art.length; i++) {
@@ -247,15 +300,23 @@ function preparePic() {
 }
 
 function startGame() {
+    timer.init(); //initialize the timer
+    timer.start(); // start the timer
+
+    state.gameStart = true;
     state.pictures = []; //list of picture class instances to be straighten
     state.finished = false;
     state.beginIdx = 0;
     state.endIdx = MAX_ONSCREEN_PICS - 1;
     state.playerNum = 1;
     state.locked = false;
+    state.gameWon = false;
 
     elements.picsEl = [];
     elements.picContainerEl.innerHTML = '';
+    if (document.getElementById('game-result')) {
+        document.getElementById('game-result').remove();
+    }
 
     preparePic();
     initiatePic();
