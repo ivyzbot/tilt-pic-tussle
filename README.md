@@ -32,12 +32,12 @@ Example of the black-frame pictures being locked: The color of the frame will tu
 	 The game ends in 2 ways:  
 	 Win: If the player is able to finish all pictures within the given time. Happy emoji will be thrown onto the screen, together with a message specifying the time the user spent on this game.
     <img width="1415" alt="win" src="https://github.com/ivyzbot/tilt-pic-tussle/assets/10040970/ff14ef9d-b705-4b68-b49d-0b07ea0d09db">
-    <br>/<br>
-	 Lose: If the player is not able to finish all the pictures.
+    <br></br>
+	Lose: If the player is not able to finish all the pictures.
     <img width="1421" alt="Lose" src="https://github.com/ivyzbot/tilt-pic-tussle/assets/10040970/369ca7bc-b88f-42fa-85ad-3b018d35ffa0">
     <br></br>
 
-## 3.Code
+## 3.Code Snippt
  - **3.1 HTML**
  ```html
 <body>
@@ -74,26 +74,112 @@ transition: 0.3s;
 	 1. Classes
 	     - Picture Class:
 	        To prepare pictures to have random colors of frame and rotation angles, and store the information in respective attributes.
-	       ```JavaScipt
+	       ```JavaScript
 	       constructor(url)
 	       ```
 	        functions: addElement(), getters, setters, resetRotationUnit(), resetColor()
 	     - Timer Class:
-		     To have a timer that returns realtime count down value in every 100 milliseconds.
-			```JavaScipt
-			constructor(elem, maxSeconds, timeupFunc)
-			```
-		     functions: init(), start(), stop(), getUsedTime(), count()
+		To have a timer that returns realtime count down value in every 100 milliseconds.
+		```JavaScript
+		constructor(elem, maxSeconds, timeupFunc)
+		```
+		functions: init(), start(), stop(), getUsedTime(), count()
+	2. Event Listeners
+	   ```JavaScript
+    	   document.addEventListener('keydown', rotatePic);
+          ```
+ 	3. Functions
+	  ```JavaScript
+   	// functions to rotate the picture
+	function rotatePic(evt) {
+	    if (state.gameStart) {
+	        if (state.pictures[state.beginIdx].getColor() === 'white') {
+	            rotateWhite(evt);
+	        } else if (state.pictures[state.beginIdx].getColor() === 'gold') {
+	            rotateGold(evt);
+	        } else if (state.pictures[state.beginIdx].getColor() === 'black') {
+	            rotateBlack(evt);
+	        }
+	    }
 
+	function rotateWhite(evt) {
+	    switch (evt.keyCode) {
+	        // left arrow
+	        case 37:
+	            if (state.pictures[state.beginIdx].getRotationUnit() < 30) {
+	                state.pictures[state.beginIdx].setRotationUnit(15);
+	                renderPic();
+	            }
+	        break;
+	   
+	        // right arrow
+	        case 39:
+	        break;
+	   
+	        // down arrow
+	        case 40:
+	        break;
+    }
+	}
 
+	 function rotateBlack(evt) {
+	    switch (state.locked) {
+	        case false:
+	            if (evt.keyCode === 38) {
+   			//finish game or remove current picture	 
+	            } else {
+	                state.locked = true;
+   
+	                setTimeout( function() {
+	                    state.locked = false;
+	                    renderPic();
+	                }, 3000);
+	                renderPic();
+	            }
+	        break;
+	    }
 
-## References:
-Color Palette: https://colorhunt.co/
-JS Confetti: https://dev.to/loonywizard/js-confetti-library-with-emojis-2152
+	//Timer workflow
+   
+	const timer = new Timers(elements.timerEl, 60, renderTimeup);
+   
+   	function startGame() {
+	    timer.init(); //initialize the timer
+	    timer.start(); // start the timer
+	}
+
+	 function finishGame(beginIdx) {
+	    timer.stop();
+	    renderGameOver();
+	}
+
+	function renderTimeup() {
+	    renderGameOver()
+	}
+
+	function renderGameOver() {
+	    if (state.gameWon) {
+	        gameResultEl.innerHTML = `Finished in ${timer.getUsedTime()} seconds!!!`;
+	    } else {
+	      //render failure msg
+	}
+  	```
+
+## 4.Challenges & Takeaways
+- 'this' keyword in class methods passed to setTimeout/setInterval functions
+- Conflicts of renderGameOver() and renderPic() when there's no check of game start
+- Always write pseudo code
+   
+## 5.Enhancements
+- 2 Player mode
+
+## 6. References:  
+Color Palette: https://colorhunt.co/  
+JS Confetti: https://dev.to/loonywizard/js-confetti-library-with-emojis-2152  
 Timer: https://codepen.io/Vohtz/pen/ExyPQBp
 
 
-## Version Control:
+## 7. Version Control:
 Version1.6: finalised for 1p mode
 1) Add a timer to track user's time spent on each game
 2) Replace alert with proper win/loss messages on screen
