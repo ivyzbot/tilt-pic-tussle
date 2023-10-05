@@ -19,6 +19,10 @@ const pictureBank = {
          new Pictures('./images/arts/img-portrait_adele_boch-1.jpg'),
          new Pictures('./images/arts/img-the_night_cafe-2.jpg'),
          new Pictures('./images/arts/img-the_persistence_of_memory-2.jpg'),
+         new Pictures('./images/arts/img-the_persistence_of_memory-2.jpg'),
+         new Pictures('./images/arts/img-the_persistence_of_memory-2.jpg'),
+         new Pictures('./images/arts/img-the_persistence_of_memory-2.jpg'),
+         new Pictures('./images/arts/img-the_persistence_of_memory-2.jpg'),
          new Pictures('./images/arts/img-wanderer_above_the_sea-1.jpeg'),
          new Pictures('./images/arts/img-woman_with_a_parasol-1.jpg'),
         ]

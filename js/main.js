@@ -18,7 +18,7 @@ const elements = {
 
  /*----- constants -----*/
 const MAX_ONSCREEN_PICS = 5;
-const timer = new Timers(elements.timerEl, 60, renderTimeup);
+const timer = new Timers(elements.timerEl, 5, renderTimeup);
 const jsConfetti = new JSConfetti();
 
  /*----- state variables -----*/
