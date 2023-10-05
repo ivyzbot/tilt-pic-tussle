@@ -2,10 +2,10 @@
 *A browser game inspired by BishiBashi arcade game.*  
 Live at: https://ivyzbot.github.io/tilt-pic-tussle/
 
-## Game Overview
+## 1.Game Overview
 In this game, the player will be given a series of tilted pictures wrapped in different colors of frames. The player's goal is to straighten the pictures as fast as he can. Pictures with different frames have different rotation rules. There will also be a timer on the top right corner to make you sweat! Feeling interested? Let's dig in!
 
-## Walkthrough
+## 2.Walkthrough
 - **Entry Page**  
   The entry page is divided into 2 sections: the lower part is the main section, which will display all the pictures later after the game starts. The upper part is the control panel, which includes a 'How to Play?' button to onboard users who are new to the game, a 'Start!' button, which kickstarts the game right away, and a timer (only appear after game starts)
 <img width="1416" alt="entry-page" src="https://github.com/ivyzbot/tilt-pic-tussle/assets/10040970/aceaadd1-f022-4d3d-8f1c-6cbb39e0f884">
@@ -20,7 +20,7 @@ In this game, the player will be given a series of tilted pictures wrapped in di
 <img width="1319" alt="game-instructions" src="https://github.com/ivyzbot/tilt-pic-tussle/assets/10040970/450d86c3-5ae9-474b-9099-49ca6c9d91ab">
 <br></br>
 
- - **Start**
+ - **Start**  
 	Click the start button and start the game right away. Once the game is started, there will be a count down timer showing on the top right corner. Follow the rules to straighten all pictures within the given time!
 <img width="1339" alt="game-start" src="https://github.com/ivyzbot/tilt-pic-tussle/assets/10040970/045576f0-19ff-4e89-bf7b-d23675e4aae7">
 <br></br>
@@ -28,16 +28,72 @@ Example of the black-frame pictures being locked: The color of the frame will tu
 <img width="1324" alt="picture-locked" src="https://github.com/ivyzbot/tilt-pic-tussle/assets/10040970/27e73849-d85e-4fc1-97c1-1ae9604d8c6e">
 <br></br>
 
- - **End**
-	 The game ends in 2 ways:
-	 - Win: If the player is able to finish all pictures within the given time. Happy emoji will be thrown onto the screen, together with a message specifying the time the user spent on this game.
+ - **End**  
+	 The game ends in 2 ways:  
+	 Win: If the player is able to finish all pictures within the given time. Happy emoji will be thrown onto the screen, together with a message specifying the time the user spent on this game.
     <img width="1415" alt="win" src="https://github.com/ivyzbot/tilt-pic-tussle/assets/10040970/ff14ef9d-b705-4b68-b49d-0b07ea0d09db">
-    <br></br>
-	 - Lose: If the player is not able to finish all the pictures.
+    <br>/<br>
+	 Lose: If the player is not able to finish all the pictures.
     <img width="1421" alt="Lose" src="https://github.com/ivyzbot/tilt-pic-tussle/assets/10040970/369ca7bc-b88f-42fa-85ad-3b018d35ffa0">
     <br></br>
 
+## 3.Code
+ - **3.1 HTML**
+ ```html
+<body>
+    <main> <!-- flex box -->
+        <div id="controls"> <!-- flex box -->
+            <div id="control-1">
+                <button id="manual">How to Play?</button>
+            </div>
+            <div id="control-2"><button id="start">Start!</button></div>
+            <div id="timer"></div>
+        </div>
+        <section> <!-- flex box -->
+            <dialog close> <!-- switch to open by event listener -->
+                <img id="manual-content" src="images/manual.png" alt="">
+                <button id="close">X</button>
+            </dialog>
+            <ul id="pic-container">
+            </ul>
+        </section>
+    </main>
+</body>
+ ```
+ - **3.2 CSS**
+ ```CSS
+ .hide {
+opacity: 0;
+}
 
+.pic-queue {
+transition: 0.3s;
+}
+ ```
+ - **3.3 JavaScript**
+	 1. Classes
+	     - Picture Class:
+	        To prepare pictures to have random colors of frame and rotation angles, and store the information in respective attributes.
+	       ```JavaScipt
+	       constructor(url)
+	       ```
+	        functions: addElement(), getters, setters, resetRotationUnit(), resetColor()
+	     - Timer Class:
+		     To have a timer that returns realtime count down value in every 100 milliseconds.
+			```JavaScipt
+			constructor(elem, maxSeconds, timeupFunc)
+			```
+		     functions: init(), start(), stop(), getUsedTime(), count()
+
+
+
+## References:
+Color Palette: https://colorhunt.co/
+JS Confetti: https://dev.to/loonywizard/js-confetti-library-with-emojis-2152
+Timer: https://codepen.io/Vohtz/pen/ExyPQBp
+
+
+## Version Control:
 Version1.6: finalised for 1p mode
 1) Add a timer to track user's time spent on each game
 2) Replace alert with proper win/loss messages on screen
