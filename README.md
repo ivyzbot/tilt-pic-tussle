@@ -37,7 +37,7 @@ Example of the black-frame pictures being locked: The color of the frame will tu
     <img width="1421" alt="Lose" src="https://github.com/ivyzbot/tilt-pic-tussle/assets/10040970/369ca7bc-b88f-42fa-85ad-3b018d35ffa0">
     <br></br>
 
-## 3.Code Snippt
+## 3.Code Snippet
  - **3.1 HTML**
  ```html
 <body>
