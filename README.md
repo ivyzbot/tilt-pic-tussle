@@ -180,6 +180,11 @@ Timer: https://codepen.io/Vohtz/pen/ExyPQBp
 
 
 ## 7. Version Control:
+Version2.1: minor changes
+1) Add .blur() to buttons, to remove button focus after click
+2) Prevent user from clicking how to play button after game start
+3) Replace the open attribute in the dialog tag and replace with .show()/.close() method on DOM elements
+   
 Version1.6: finalised for 1p mode
 1) Add a timer to track user's time spent on each game
 2) Replace alert with proper win/loss messages on screen
