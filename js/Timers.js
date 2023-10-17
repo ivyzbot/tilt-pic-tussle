@@ -40,7 +40,6 @@ class Timers {
             // console.log(this);
             this.setIntervalId = setInterval(this.count.bind(this), 1);
         }
-
     }
 
     stop() {
